@@ -70,8 +70,11 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
 .nav-btn:hover{color:var(--text);border-color:var(--border);}
 .nav-btn.active{color:var(--blue);border-color:var(--blue);background:var(--blue-light);}
 .tb-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
-.wallet-pill{display:flex;align-items:center;gap:8px;background:var(--blue-light);border:2px solid var(--blue);border-radius:8px;padding:5px 12px;font-size:13px;font-weight:700;}
+.wallet-pill{display:flex;align-items:center;gap:8px;background:var(--blue-light);border:2px solid var(--blue);border-radius:8px;padding:5px 12px;font-size:13px;font-weight:700;gap:4px;}
 .wallet-pill .wp-shares{color:var(--blue);}
+.wallet-pnl{font-size:11px;font-weight:700;font-family:"JetBrains Mono",monospace;padding:2px 6px;border-radius:4px;}
+.wallet-pnl.pos{color:var(--green);background:var(--green-light);}
+.wallet-pnl.neg{color:var(--red);background:var(--red-light);}
 .notif-btn{position:relative;background:none;border:2px solid var(--border);border-radius:7px;color:var(--text2);font-size:16px;padding:5px 9px;}
 .notif-badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid #fff;}
 .notif-panel{position:absolute;top:62px;right:0;width:360px;background:#fff;border:3px solid var(--text);border-radius:12px;z-index:300;overflow:hidden;box-shadow:6px 6px 0 var(--text);}
@@ -97,18 +100,22 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
 .group-filter{display:flex;gap:6px;flex-wrap:wrap;}
 .gf-btn{padding:5px 10px;background:#fff;border:2px solid var(--border);border-radius:6px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;text-transform:uppercase;}
 .gf-btn:hover,.gf-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
-.markets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
-.team-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.team-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .2s;}
-.team-card:hover{border-color:var(--blue);box-shadow:4px 4px 0 var(--blue);transform:translateY(-2px);}
-.team-card:hover::before{transform:scaleX(1);}
-.team-card.resolved{opacity:.65;}
-.tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.tc-flag{font-size:28px;}.tc-group{font-size:9px;font-weight:700;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--muted);text-transform:uppercase;}
-.tc-name{font-size:13px;font-weight:700;margin-bottom:6px;}
-.tc-price{font-size:24px;font-weight:700;font-family:"JetBrains Mono",monospace;color:var(--blue);margin-bottom:4px;}
-.tc-actions{display:flex;gap:6px;margin-top:10px;}
-.res-badge{background:var(--green-light);color:var(--green);border:1px solid var(--green);border-radius:6px;padding:3px 8px;font-size:12px;font-weight:600;}
+.markets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.team-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:18px 16px 14px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
+.team-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--orange));transform:scaleX(0);transform-origin:left;transition:transform .22s;}
+.team-card:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(27,79,216,.15);transform:translateY(-3px);}
+.team-card:hover::after{transform:scaleX(1);}
+.team-card.resolved{opacity:.7;}
+.tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.tc-flag{font-size:32px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1));}
+.tc-group{font-size:9px;font-weight:700;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.tc-name{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--text);}
+.tc-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;}
+.tc-price{font-size:26px;font-weight:700;font-family:"JetBrains Mono",monospace;color:var(--blue);line-height:1;}
+.tc-price-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;}
+.tc-spread{font-size:11px;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-bottom:8px;}
+.tc-actions{display:flex;gap:6px;margin-top:4px;}
+.res-badge{background:var(--green-light);color:var(--green);border:1px solid var(--green);border-radius:6px;padding:3px 10px;font-size:13px;font-weight:700;}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -182,12 +189,17 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
 .order-warning{background:var(--bg2);border:2px solid var(--border);border-radius:10px;padding:14px;font-size:12px;font-family:"JetBrains Mono",monospace;line-height:1.8;}
 
 /* PORTFOLIO */
-.port-wallet{background:linear-gradient(135deg,var(--blue) 0%,#2563EB 100%);border:3px solid var(--text);border-radius:14px;padding:28px;margin-bottom:24px;color:#fff;box-shadow:5px 5px 0 var(--text);}
-.pw-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;opacity:.7;margin-bottom:6px;}
-.pw-val{font-size:40px;font-weight:700;font-family:"JetBrains Mono",monospace;}
-.pw-sub{font-size:13px;opacity:.7;margin-top:4px;}
-.positions-list,.orders-list{display:flex;flex-direction:column;gap:8px;}
-.position-row,.order-row{background:#fff;border:2px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;}
+.port-wallet{background:linear-gradient(135deg,#1a3fa8 0%,var(--blue) 50%,#2563EB 100%);border:3px solid var(--text);border-radius:14px;padding:28px;margin-bottom:24px;color:#fff;box-shadow:5px 5px 0 var(--text);display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:center;}
+.pw-block{}
+.pw-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;opacity:.65;margin-bottom:6px;}
+.pw-val{font-size:36px;font-weight:700;font-family:"JetBrains Mono",monospace;line-height:1;}
+.pw-val-sm{font-size:26px;font-weight:700;font-family:"JetBrains Mono",monospace;line-height:1;}
+.pw-sub{font-size:12px;opacity:.65;margin-top:5px;}
+.pw-divider{width:1px;background:rgba(255,255,255,.2);align-self:stretch;}
+.positions-list,.orders-list{display:flex;flex-direction:column;gap:10px;}
+.position-row,.order-row{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:14px;font-size:13px;transition:border-color .15s;}
+.position-row:hover{border-color:var(--blue);}
+.order-row{grid-template-columns:auto 1fr auto auto;}
 .side-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;}
 .side-badge.long{background:var(--green-light);color:var(--green);border:1px solid var(--green);}
 .side-badge.short{background:var(--red-light);color:var(--red);border:1px solid var(--red);}
@@ -243,6 +255,31 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
 
 @media(max-width:900px){.modal-body{grid-template-columns:1fr;}.rules-grid{grid-template-columns:1fr;}.holders-grid{grid-template-columns:1fr;}}
 @media(max-width:700px){.auth-card{width:95%;padding:24px;}.page{padding:12px;}.topbar{padding:0 10px;gap:2px;}.nav-btn{padding:4px 7px;font-size:10px;}.markets-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}}
+
+/* DM / CHAT PRIVE */
+.dm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;}
+.dm-box{background:#fff;border:3px solid var(--text);border-radius:16px;width:100%;max-width:500px;display:flex;flex-direction:column;height:560px;box-shadow:6px 6px 0 var(--text);}
+.dm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:2px solid var(--border);background:var(--bg2);border-radius:13px 13px 0 0;}
+.dm-title{font-size:14px;font-weight:700;}
+.dm-messages{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+.dm-input-row{display:flex;gap:8px;padding:12px;border-top:2px solid var(--border);}
+.dm-input-row input{flex:1;padding:8px 12px;font-size:13px;}
+.dm-btn{background:var(--blue-light);border:2px solid var(--blue);border-radius:8px;color:var(--blue);font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .15s;}
+.dm-btn:hover{background:var(--blue);color:#fff;}
+
+/* MARKET AT (achat au marche) */
+.market-at-box{background:var(--bg2);border:2px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;}
+.market-at-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;}
+.market-at-row{display:flex;gap:8px;align-items:center;margin-bottom:6px;}
+.market-at-row label{font-size:12px;color:var(--text2);min-width:90px;}
+.market-at-price{font-size:18px;font-weight:700;font-family:"JetBrains Mono",monospace;color:var(--blue);}
+.market-at-price.ask{color:var(--red);}
+.market-at-price.bid{color:var(--green);}
+
+/* NETTING banner */
+.netting-banner{background:var(--orange);color:#fff;border:3px solid var(--text);border-radius:12px;padding:20px 24px;margin-bottom:20px;box-shadow:4px 4px 0 var(--text);}
+.netting-banner h3{font-family:"Protest Guerrilla",sans-serif;font-size:22px;margin-bottom:12px;}
+.netting-row-h{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2);font-size:14px;}
 </style>
 </head>
 <body>
@@ -265,7 +302,7 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
       <div class="fgroup"><label>Email</label><input type="email" id="reg-email" placeholder="ton@email.com"></div>
       <div class="fgroup"><label>Mot de passe</label><input type="password" id="reg-pass" placeholder="••••••••"></div>
       <div class="fgroup"><label>Mise de depart (€ min. 5€)</label><input type="number" id="reg-amount" value="5" min="5" step="5"></div>
-      <div class="pay-box"><div class="pb-label">Paiement par Lydia</div><p>Envoie le montant a <strong>Aurel sur Lydia</strong> avec ton pseudo en commentaire.<br><strong>5€ = 250 shares · 1 share = 1€</strong></p></div>
+      <div class="pay-box"><div class="pb-label">Paiement par Lydia</div><p>Envoie le montant a <strong>Aurel sur Lydia</strong> avec ton pseudo en commentaire.<br><strong>5€ = 250€ virtuels · 1€ virtuel = 1€ reel</strong></p></div>
       <button class="btn btn-primary btn-full" id="btn-register" onclick="doRegister()">S'inscrire</button>
     </div>
   </div>
@@ -297,11 +334,15 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
         <button class="notif-btn" onclick="toggleNotifs()">🔔<span class="notif-badge hidden" id="notif-badge">0</span></button>
         <div class="notif-panel hidden" id="notif-panel"><div class="notif-panel-header">Notifications</div><div id="notif-list"></div></div>
       </div>
+      <button class="btn btn-ghost btn-xs" onclick="navigateTo('dm')" title="Messages prives">💬</button>
       <button class="btn btn-ghost btn-xs" onclick="doLogout()">Quitter</button>
     </div>
   </div>
   <div id="page-markets" class="page">
-    <div class="page-title">Marches WC 2026</div>
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+      <div class="page-title" style="margin-bottom:0">Marches WC 2026</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:600">48 equipes · cliquer pour trader</div>
+    </div>
     <div class="markets-controls">
       <input type="text" class="search-input" id="search-input" placeholder="Chercher une equipe..." oninput="filterMarkets()">
       <div class="group-filter" id="group-filter"></div>
@@ -313,6 +354,7 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
   <div id="page-leaderboard" class="page hidden"><div class="page-title">Classement</div><div id="leaderboard-content"></div></div>
   <div id="page-rules" class="page hidden"><div id="rules-content"></div></div>
   <div id="page-admin" class="page hidden"><div class="page-title">Admin</div><div id="admin-content"></div></div>
+  <div id="page-dm" class="page hidden"><div class="page-title">Messages prives</div><div id="dm-content"></div></div>
 </div>
 
 <!-- TEAM MODAL -->
@@ -395,16 +437,41 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
       </div>
       <input type="hidden" id="order-side" value="buy">
       <input type="hidden" id="order-teamid">
-      <div class="fgroup"><label>Prix (1-99)</label><input type="number" id="order-price" min="1" max="99" placeholder="ex: 45" oninput="calcOrderWarning()" style="font-size:22px;font-family:'JetBrains Mono',monospace;font-weight:700;"></div>
-      <div class="fgroup"><label>Quantite (min. 1)</label><input type="number" id="order-qty" min="1" value="1" oninput="calcOrderWarning()"></div>
+      <!-- ACHAT AU MARCHE -->
+      <div class="market-at-box" id="market-at-box">
+        <div class="market-at-title">⚡ Executer au marche</div>
+        <div id="market-at-info" style="font-size:13px;color:var(--muted)">Chargement du marche...</div>
+        <div id="market-at-actions" style="display:flex;gap:8px;margin-top:10px"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.1em">ou placer un ordre limite</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <div class="fgroup"><label>Prix limite (1-99)</label><input type="number" id="order-price" min="1" max="99" placeholder="ex: 45" oninput="calcOrderWarning()" style="font-size:22px;font-family:'JetBrains Mono',monospace;font-weight:700;"></div>
+      <div class="fgroup"><label>Quantite (€, min. 1)</label><input type="number" id="order-qty" min="1" value="1" oninput="calcOrderWarning()"></div>
       <div class="order-warning hidden" id="order-warning"></div>
-      <div style="background:var(--blue-light);border:2px solid var(--blue);border-radius:8px;padding:12px;font-size:12px;color:var(--blue);line-height:1.6;">Les shares sont bloques en escrow jusqu'au match ou a l'annulation.</div>
-      <button class="btn btn-primary btn-full" id="btn-submit-order" onclick="submitOrder()">Confirmer l'ordre</button>
+      <button class="btn btn-primary btn-full" id="btn-submit-order" onclick="submitOrder()">Confirmer l'ordre limite</button>
     </div>
   </div>
 </div>
 
 <div id="toast-container"></div>
+
+<!-- DM / CHAT PRIVE MODAL -->
+<div id="dm-modal" class="dm-overlay hidden" onclick="if(event.target===this)closeDM()">
+  <div class="dm-box">
+    <div class="dm-header">
+      <div class="dm-title">💬 Message prive — <span id="dm-recipient-name">—</span></div>
+      <button class="modal-close" onclick="closeDM()">✕</button>
+    </div>
+    <div class="dm-messages" id="dm-messages"></div>
+    <div class="dm-input-row">
+      <input type="text" id="dm-input" placeholder="Ton message..." onkeydown="if(event.key==='Enter')sendDM()">
+      <button class="btn btn-primary btn-sm" onclick="sendDM()">Envoyer</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://urzeaesixkbmpychczny.supabase.co';
@@ -436,7 +503,7 @@ const{createClient}=supabase;
 const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 let currentUser=null,currentProfile=null,selectedTeam=null;
 let obChannel=null,chatChannel=null,notifChannel=null,priceChartInstance=null;
-let allPrices={},allResolved={};
+let allPrices={},allResolved={};window.allBids={};window.allAsks={};
 let searchQuery='',groupFilter='ALL';
 
 sb.auth.onAuthStateChange(async(event,session)=>{
@@ -469,6 +536,8 @@ async function doLogin(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value;
   const btn=document.getElementById('btn-login');btn.textContent='Connexion...';btn.disabled=true;
+  // Fix: nettoyer les cles Supabase corrompues avant de tenter la connexion
+  try{Object.keys(localStorage).filter(k=>k.startsWith('sb-')).forEach(k=>localStorage.removeItem(k));}catch(e){}
   const{error}=await sb.auth.signInWithPassword({email,password:pass});
   if(error){toast('Email ou mot de passe incorrect','error');btn.textContent='Se connecter';btn.disabled=false;}
 }
@@ -492,18 +561,30 @@ async function doLogout(){
 }
 function navigateTo(page){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  ['markets','portfolio','history','leaderboard','rules','admin'].forEach(p=>document.getElementById('page-'+p)?.classList.toggle('hidden',p!==page));
+  ['markets','portfolio','history','leaderboard','rules','admin','dm'].forEach(p=>document.getElementById('page-'+p)?.classList.toggle('hidden',p!==page));
   if(page==='markets')renderMarkets();if(page==='portfolio')renderPortfolio();if(page==='history')renderHistory();
-  if(page==='leaderboard')renderLeaderboard();if(page==='rules')renderRules();if(page==='admin'&&currentProfile?.is_admin)renderAdmin();
+  if(page==='leaderboard')renderLeaderboard();if(page==='rules')renderRules();if(page==='admin'&&currentProfile?.is_admin)renderAdmin();if(page==='dm')renderDMList();
 }
 function updateTopbar(){
-  document.getElementById('tb-pseudo').textContent=currentProfile?.pseudo||'';  const bal=currentProfile?.shares||0;document.getElementById('tb-shares').textContent=bal.toLocaleString('fr');
+  document.getElementById('tb-pseudo').textContent=currentProfile?.pseudo||'';
+  const bal=currentProfile?.shares||0;document.getElementById('tb-shares').textContent=bal.toLocaleString('fr');
   document.getElementById('btn-admin-nav')?.classList.toggle('hidden',!currentProfile?.is_admin);
 }
 
 async function renderMarkets(){
-  const[{data:prices},{data:resolved}]=await Promise.all([sb.from('market_prices').select('*'),sb.from('resolved_markets').select('*')]);
-  (prices||[]).forEach(p=>allPrices[p.team_id]=p);(resolved||[]).forEach(r=>allResolved[r.team_id]=r);
+  const[{data:prices},{data:resolved},{data:bids},{data:asks}]=await Promise.all([
+    sb.from('market_prices').select('*'),
+    sb.from('resolved_markets').select('*'),
+    sb.from('orders').select('team_id,price').eq('side','buy').eq('status','open').order('price',{ascending:false}),
+    sb.from('orders').select('team_id,price').eq('side','sell').eq('status','open').order('price',{ascending:true})
+  ]);
+  (prices||[]).forEach(p=>allPrices[p.team_id]=p);
+  (resolved||[]).forEach(r=>allResolved[r.team_id]=r);
+  // Best bid/ask par equipe
+  const bidMap={},askMap={};
+  (bids||[]).forEach(o=>{if(!bidMap[o.team_id])bidMap[o.team_id]=o.price;});
+  (asks||[]).forEach(o=>{if(!askMap[o.team_id])askMap[o.team_id]=o.price;});
+  window.allBids=bidMap;window.allAsks=askMap;
   renderGroupFilter();renderMarketGrid();
 }
 function renderGroupFilter(){
@@ -519,10 +600,15 @@ function renderMarketGrid(){
   if(searchQuery)filtered=filtered.filter(t=>t.name.toLowerCase().includes(searchQuery));
   grid.innerHTML=filtered.map(team=>{
     const p=allPrices[team.id],lastPrice=p?.last_price??null,res=allResolved[team.id],resVal=res?RESOLUTION[res.stage]:null;
+    const bid=allBids[team.id]??null,ask=allAsks[team.id]??null;
+    const spreadStr=(bid&&ask)?`<span style="color:var(--green)">${bid}</span> / <span style="color:var(--red)">${ask}</span>`:bid?`<span style="color:var(--green)">${bid}</span> / —`:ask?`— / <span style="color:var(--red)">${ask}</span>`:'<span style="color:var(--muted)">—</span>';
     return `<div class="team-card${res?' resolved':''}" onclick="openTeam('${team.id}')">
       <div class="tc-top"><div class="tc-flag">${team.flag}</div><div class="tc-group">Grp ${team.group}</div></div>
       <div class="tc-name">${team.name}</div>
-      <div class="tc-price">${res?`<span class="res-badge">${resVal}</span>`:lastPrice!==null?lastPrice:'<span style="color:var(--muted);font-size:16px">—</span>'}</div>
+      <div class="tc-price-row">
+        ${res?`<span class="res-badge">${resVal}</span>`:lastPrice!==null?`<span class="tc-price">${lastPrice}</span><span class="tc-price-label">last</span>`:'<span class="tc-price" style="color:var(--muted);font-size:18px">—</span>'}
+      </div>
+      <div class="tc-spread">Bid/Ask : ${spreadStr}</div>
       ${!res?`<div class="tc-actions"><button class="btn btn-buy btn-xs" onclick="event.stopPropagation();openOrder('${team.id}','buy')">BUY</button><button class="btn btn-sell btn-xs" onclick="event.stopPropagation();openOrder('${team.id}','sell')">SELL</button></div>`:''}
     </div>`;
   }).join('');
@@ -550,11 +636,20 @@ function switchModalTab(tab){
 async function renderModalInfoBar(teamId){
   const[{data:trades},{data:orders}]=await Promise.all([sb.from('trades').select('price,qty').eq('team_id',teamId).neq('status','cancelled'),sb.from('orders').select('escrow').eq('team_id',teamId).eq('status','open')]);
   const vol=trades?.reduce((s,t)=>s+t.price*t.qty,0)||0,esc=orders?.reduce((s,o)=>s+o.escrow,0)||0,last=allPrices[teamId]?.last_price,res=allResolved[teamId];
+  // Charger meilleur bid/ask
+  const[{data:bb},{data:ba}]=await Promise.all([
+    sb.from('orders').select('price').eq('team_id',teamId).eq('side','buy').eq('status','open').order('price',{ascending:false}).limit(1),
+    sb.from('orders').select('price').eq('team_id',teamId).eq('side','sell').eq('status','open').order('price',{ascending:true}).limit(1)
+  ]);
+  const bestBidV=bb?.[0]?.price,bestAskV=ba?.[0]?.price;
+  const midV=(bestBidV&&bestAskV)?((bestBidV+bestAskV)/2).toFixed(1):last??'—';
   document.getElementById('modal-info-bar').innerHTML=`
-    <div class="mib-stat"><div class="mib-label">Dernier prix</div><div class="mib-val" style="color:var(--blue)">${last??'—'}</div></div>
-    <div class="mib-stat"><div class="mib-label">Volume</div><div class="mib-val">${vol.toLocaleString('fr')} sh</div></div>
+    <div class="mib-stat"><div class="mib-label">Last</div><div class="mib-val" style="color:var(--blue)">${last??'—'}</div></div>
+    <div class="mib-stat"><div class="mib-label">Bid</div><div class="mib-val" style="color:var(--green)">${bestBidV??'—'}</div></div>
+    <div class="mib-stat"><div class="mib-label">Ask</div><div class="mib-val" style="color:var(--red)">${bestAskV??'—'}</div></div>
+    <div class="mib-stat"><div class="mib-label">Mid</div><div class="mib-val">${midV}</div></div>
+    <div class="mib-stat"><div class="mib-label">Volume</div><div class="mib-val">${vol.toLocaleString('fr')}€</div></div>
     <div class="mib-stat"><div class="mib-label">Trades</div><div class="mib-val">${trades?.length||0}</div></div>
-    <div class="mib-stat"><div class="mib-label">Liquidite</div><div class="mib-val">${esc.toLocaleString('fr')} sh</div></div>
     ${res?`<span class="stat-pill" style="background:var(--green-light);border-color:var(--green);color:var(--green)">Resolu @${RESOLUTION[res.stage]}</span>`:''}`;
 }
 async function subscribeOrderbook(teamId){
@@ -623,13 +718,56 @@ async function sendChat(){
   if(!text||!selectedTeam)return;inp.value='';
   await sb.from('chat').insert({user_id:currentUser.id,pseudo:currentProfile.pseudo,team_id:selectedTeam,text});
 }
-function openOrder(teamId,side){
+async function openOrder(teamId,side){
   selectedTeam=teamId;const team=TEAMS.find(t=>t.id===teamId);
   document.getElementById('order-teamid').value=teamId;
   document.getElementById('order-modal-title').textContent=team.flag+' '+team.name;
   document.getElementById('order-price').value='';document.getElementById('order-qty').value='1';
   document.getElementById('order-warning').classList.add('hidden');setOrderSide(side);
   document.getElementById('order-modal').classList.remove('hidden');document.body.style.overflow='hidden';
+  // Charger le marche au marche
+  await loadMarketAt(teamId,side);
+}
+async function loadMarketAt(teamId,side){
+  const infoEl=document.getElementById('market-at-info');
+  const actEl=document.getElementById('market-at-actions');
+  infoEl.textContent='Chargement...';actEl.innerHTML='';
+  const[{data:bids},{data:asks}]=await Promise.all([
+    sb.from('orders').select('*').eq('team_id',teamId).eq('side','buy').eq('status','open').order('price',{ascending:false}).limit(1),
+    sb.from('orders').select('*').eq('team_id',teamId).eq('side','sell').eq('status','open').order('price',{ascending:true}).limit(1)
+  ]);
+  const bestBid=bids?.[0],bestAsk=asks?.[0];
+  let html='';
+  if(bestAsk&&side==='buy'){
+    html=`<span>Meilleure offre : <strong class="market-at-price ask">${bestAsk.price}</strong> (${bestAsk.remaining}€ dispo — de <em>${esc(bestAsk.pseudo)}</em>)</span>`;
+    actEl.innerHTML=`<button class="btn btn-buy btn-sm" onclick="fillOrderAt('${bestAsk.id}','buy')">⚡ Acheter @${bestAsk.price} (${bestAsk.remaining}€)</button>`;
+  } else if(bestBid&&side==='sell'){
+    html=`<span>Meilleur bid : <strong class="market-at-price bid">${bestBid.price}</strong> (${bestBid.remaining}€ dispo — de <em>${esc(bestBid.pseudo)}</em>)</span>`;
+    actEl.innerHTML=`<button class="btn btn-sell btn-sm" onclick="fillOrderAt('${bestBid.id}','sell')">⚡ Vendre @${bestBid.price} (${bestBid.remaining}€)</button>`;
+  } else {
+    html='<span style="color:var(--muted)">Aucun ordre disponible au marche.</span>';
+  }
+  infoEl.innerHTML=html;
+}
+async function fillOrderAt(orderId,myRole){
+  const{data:order}=await sb.from('orders').select('*').eq('id',orderId).single();
+  if(!order||order.status!=='open'){toast('Ordre plus disponible','error');await loadMarketAt(selectedTeam,myRole);return;}
+  if(order.user_id===currentUser.id){toast('Ton propre ordre !','error');return;}
+  const qty=order.remaining,price=order.price;
+  const escrowAmt=myRole==='buy'?price*qty:(100-price)*qty;
+  const maxGain=myRole==='buy'?(100-price)*qty:price*qty;
+  if(!confirm('Executer au marche @'+price+' pour '+qty+'€ ?\nGain max: +'+maxGain+'€  Perte max: -'+escrowAmt+'€'))return;
+  const newBal=(currentProfile.shares||0)-escrowAmt;
+  await sb.from('profiles').update({shares:newBal}).eq('id',currentUser.id);
+  await sb.from('orders').update({status:'matched',remaining:0}).eq('id',orderId);
+  const buyer=myRole==='buy'?currentUser.id:order.user_id,seller=myRole==='sell'?currentUser.id:order.user_id;
+  const buyerPseudo=myRole==='buy'?currentProfile.pseudo:order.pseudo,sellerPseudo=myRole==='sell'?currentProfile.pseudo:order.pseudo;
+  await sb.from('trades').insert({buyer_id:buyer,seller_id:seller,buyer_pseudo:buyerPseudo,seller_pseudo:sellerPseudo,team_id:order.team_id,price,qty,escrow_buyer:price*qty,escrow_seller:(100-price)*qty,status:'open'});
+  await sb.from('market_prices').upsert({team_id:order.team_id,last_price:price},{onConflict:'team_id'});
+  await sb.from('notifications').insert({user_id:order.user_id,msg:'Trade execute au marche : '+order.team_id+' @'+price+' par '+currentProfile.pseudo,read:false});
+  currentProfile.shares=newBal;updateTopbar();
+  toast('Trade execute au marche @'+price+' !','success');
+  closeOrderModal();
 }
 function closeOrderModal(){document.getElementById('order-modal').classList.add('hidden');document.body.style.overflow='';}
 function setOrderSide(side){
@@ -637,6 +775,7 @@ function setOrderSide(side){
   document.getElementById('ost-buy').className='ost-btn buy'+(side==='buy'?' active':'');
   document.getElementById('ost-sell').className='ost-btn sell'+(side==='sell'?' active':'');
   calcOrderWarning();
+  if(selectedTeam)loadMarketAt(selectedTeam,side);
 }
 function calcOrderWarning(){
   const price=parseFloat(document.getElementById('order-price').value)||0,qty=parseInt(document.getElementById('order-qty').value)||0,side=document.getElementById('order-side').value,w=document.getElementById('order-warning');
@@ -688,7 +827,32 @@ async function renderPortfolio(){
   const[{data:bt},{data:st},{data:oo},{data:prices}]=await Promise.all([sb.from('trades').select('*').eq('buyer_id',currentUser.id).eq('status','open'),sb.from('trades').select('*').eq('seller_id',currentUser.id).eq('status','open'),sb.from('orders').select('*').eq('user_id',currentUser.id).eq('status','open'),sb.from('market_prices').select('*')]);
   const pm={};(prices||[]).forEach(p=>pm[p.team_id]=p);
   const trades=[...(bt||[]).map(t=>({...t,myRole:'buyer'})),...(st||[]).map(t=>({...t,myRole:'seller'}))];
-  let html=`<div class="port-wallet"><div class="pw-label">Budget disponible</div><div class="pw-val">${(currentProfile.shares||0).toLocaleString('fr')}<span style="font-size:20px;opacity:.6;margin-left:6px">€</span></div><div class="pw-sub">Solde virtuel — reglement a la fin du tournoi</div></div>`;
+  // Calculer PNL latent total
+  const latentPnl=trades.reduce((sum,t)=>{
+    const last=pm[t.team_id]?.last_price??t.price,isBuyer=t.myRole==='buyer';
+    return sum+(isBuyer?(last-t.price)*t.qty:(t.price-last)*t.qty);
+  },0);
+  const totalNet=(currentProfile.shares||0)+latentPnl;
+  const pnlColor=latentPnl>=0?'rgba(134,239,172,.3)':'rgba(252,165,165,.3)';
+  let html=`<div class="port-wallet">
+    <div class="pw-block">
+      <div class="pw-label">Solde dispo</div>
+      <div class="pw-val">${(currentProfile.shares||0).toLocaleString('fr')}€</div>
+      <div class="pw-sub">Virtuel</div>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-block">
+      <div class="pw-label">PNL latent</div>
+      <div class="pw-val-sm" style="color:${latentPnl>=0?'#86efac':'#fca5a5'}">${latentPnl>=0?'+':''}${latentPnl.toFixed(0)}€</div>
+      <div class="pw-sub">Positions ouvertes</div>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-block">
+      <div class="pw-label">Total estime</div>
+      <div class="pw-val-sm">${totalNet.toFixed(0)}€</div>
+      <div class="pw-sub">Solde + PNL</div>
+    </div>
+  </div>`;
   if(trades.length){
     html+='<div class="section-title" style="margin-bottom:12px">Positions ouvertes</div><div class="positions-list">';
     trades.forEach(t=>{
@@ -882,7 +1046,7 @@ async function renderAdmin(){
   html+=`<div class="admin-section"><h3>Joueurs actifs</h3><div class="admin-list">`;(allUsers||[]).filter(u=>u.status==='active').forEach(u=>{html+=`<div class="admin-row"><div><strong>${u.pseudo}</strong> <span style="color:var(--muted);font-size:12px">${u.email}</span></div><div class="mono" style="color:var(--blue);font-weight:700">${(u.shares||0).toLocaleString('fr')} sh</div></div>`;});html+='</div></div>';
   el.innerHTML=html;
 }
-async function approveUser(uid){const{data:u}=await sb.from('profiles').select('*').eq('id',uid).single();await sb.from('profiles').update({status:'active',shares:(u.shares||0)+(u.pending_shares||0),pending_shares:0,pending_eur:0}).eq('id',uid);await sb.from('notifications').insert({user_id:uid,msg:'Compte active ! +'+u.pending_shares+' shares. Bienvenue !',read:false});toast('Joueur valide','success');renderAdmin();}
+async function approveUser(uid){const{data:u}=await sb.from('profiles').select('*').eq('id',uid).single();await sb.from('profiles').update({status:'active',shares:(u.shares||0)+(u.pending_shares||0),pending_shares:0,pending_eur:0}).eq('id',uid);await sb.from('notifications').insert({user_id:uid,msg:'Compte active ! +'+u.pending_shares+'€ virtuels credites. Bienvenue sur Aurel WC !',read:false});toast('Joueur valide','success');renderAdmin();}
 async function rejectUser(uid){if(!confirm('Rejeter ce compte ?'))return;await sb.from('profiles').update({status:'rejected'}).eq('id',uid);toast('Compte rejete','success');renderAdmin();}
 async function doRecharge(){const uid=document.getElementById('recharge-uid').value,eur=parseInt(document.getElementById('recharge-eur').value)||0;if(eur<5){toast('Minimum 5€','error');return;}const shares=eur*SHARES_PER_EUR;const{data:u}=await sb.from('profiles').select('shares').eq('id',uid).single();await sb.from('profiles').update({shares:(u.shares||0)+shares}).eq('id',uid);await sb.from('notifications').insert({user_id:uid,msg:'+'+shares+' shares credites ('+eur+'€ recus)',read:false});toast('+'+shares+' shares credites','success');renderAdmin();}
 async function resolveMarket(){
@@ -900,6 +1064,83 @@ async function resolveMarket(){
   await sb.from('resolved_markets').upsert({team_id:teamId,stage,value},{onConflict:'team_id'});
   toast(team?.name+' resolu @'+value+' — '+trades.length+' trades regles','success');renderAdmin();renderMarkets();
 }
+// ═══ DM / MESSAGES PRIVES ═══
+let dmChannel=null,dmRecipientId=null,dmRecipientPseudo=null;
+
+async function renderDMList(){
+  const el=document.getElementById('dm-content');
+  el.innerHTML='<div style="color:var(--muted);padding:20px">Chargement...</div>';
+  // Charger tous les joueurs actifs
+  const{data:players}=await sb.from('profiles').select('id,pseudo').eq('status','active').neq('id',currentUser.id);
+  // Compter les messages non lus par expediteur
+  const{data:unread}=await sb.from('dm').select('from_id').eq('to_id',currentUser.id).eq('read',false);
+  const unreadMap={};(unread||[]).forEach(m=>{unreadMap[m.from_id]=(unreadMap[m.from_id]||0)+1;});
+  let html='<div style="max-width:600px">';
+  html+='<p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Envoie un message prive a un joueur — utile pour le reglement apres le tournoi.</p>';
+  html+='<div style="display:flex;flex-direction:column;gap:8px">';
+  (players||[]).forEach(p=>{
+    const u=unreadMap[p.id]||0;
+    html+=`<div style="background:#fff;border:2px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .15s" onclick="openDM('${p.id}','${esc(p.pseudo)}')" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div class="holder-avatar" style="background:${avatarColor(p.pseudo)};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;flex-shrink:0">${avatarInitial(p.pseudo)}</div>
+      <div style="font-weight:700;flex:1">${esc(p.pseudo)}</div>
+      ${u>0?`<span style="background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">${u}</span>`:''}
+      <span style="font-size:11px;color:var(--muted)">→ Ecrire</span>
+    </div>`;
+  });
+  html+='</div></div>';
+  el.innerHTML=html;
+}
+
+async function openDM(userId,pseudo){
+  dmRecipientId=userId;dmRecipientPseudo=pseudo;
+  document.getElementById('dm-recipient-name').textContent=pseudo;
+  document.getElementById('dm-modal').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  await loadDMMessages();
+  // Marquer comme lus
+  await sb.from('dm').update({read:true}).eq('to_id',currentUser.id).eq('from_id',userId);
+  // Subscribe
+  if(dmChannel)sb.removeChannel(dmChannel);
+  dmChannel=sb.channel('dm-'+[currentUser.id,userId].sort().join('-'))
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dm'},()=>loadDMMessages())
+    .subscribe();
+}
+
+async function loadDMMessages(){
+  // Messages entre les deux utilisateurs dans les deux sens
+  const{data}=await sb.from('dm').select('*')
+    .or(`and(from_id.eq.${currentUser.id},to_id.eq.${dmRecipientId}),and(from_id.eq.${dmRecipientId},to_id.eq.${currentUser.id})`)
+    .order('created_at',{ascending:true}).limit(100);
+  const box=document.getElementById('dm-messages');if(!box)return;
+  box.innerHTML=(data||[]).map(m=>{
+    const isMe=m.from_id===currentUser.id;
+    const time=m.created_at?new Date(m.created_at).toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="chat-msg-wrap${isMe?' me':''}">
+      <div class="chat-avatar" style="background:${avatarColor(isMe?currentProfile.pseudo:dmRecipientPseudo)}">${avatarInitial(isMe?currentProfile.pseudo:dmRecipientPseudo)}</div>
+      <div class="chat-bubble${isMe?' me':''}">
+        <div class="chat-pseudo" style="color:${avatarColor(isMe?currentProfile.pseudo:dmRecipientPseudo)}">${isMe?currentProfile.pseudo:esc(dmRecipientPseudo)}</div>
+        <div class="chat-text">${esc(m.text)}</div>
+        <div class="chat-time">${time}</div>
+      </div>
+    </div>`;
+  }).join('');
+  box.scrollTop=box.scrollHeight;
+}
+
+async function sendDM(){
+  const inp=document.getElementById('dm-input'),text=inp.value.trim();
+  if(!text||!dmRecipientId)return;inp.value='';
+  await sb.from('dm').insert({from_id:currentUser.id,to_id:dmRecipientId,from_pseudo:currentProfile.pseudo,text,read:false});
+  // Notif
+  await sb.from('notifications').insert({user_id:dmRecipientId,msg:'💬 Message prive de '+currentProfile.pseudo,read:false});
+}
+
+function closeDM(){
+  document.getElementById('dm-modal').classList.add('hidden');
+  document.body.style.overflow='';
+  if(dmChannel){sb.removeChannel(dmChannel);dmChannel=null;}
+}
+
 async function adminCancelTrade(tradeId){
   if(!confirm('Annuler ce trade et rembourser les deux parties ?'))return;
   const{data:t}=await sb.from('trades').select('*').eq('id',tradeId).single();
