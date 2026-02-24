@@ -477,7 +477,7 @@ button{cursor:pointer;font-family:"Cabin",sans-serif;}
 // FIX CONNEXION : nettoyer sessions Supabase corrompues/expirees au chargement
 (function(){
   try{
-    Object.keys(localStorage).filter(k=>k.startsWith('sb-')).forEach(k=>{
+    Object.keys(localStorage).filter(k=>k.startsWith('sb-')&&k!=='aurelwc-auth').forEach(k=>{
       try{
         const v=JSON.parse(localStorage.getItem(k));
         if(!v||!v.expires_at||(v.expires_at*1000<Date.now())){
@@ -514,7 +514,14 @@ function avatarColor(s){let h=0;for(let c of String(s))h=(h*31+c.charCodeAt(0))%
 function avatarInitial(s){return s?s[0].toUpperCase():'?';}
 
 const{createClient}=supabase;
-const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
+  auth:{
+    autoRefreshToken:true,
+    persistSession:true,
+    detectSessionInUrl:false,
+    storageKey:'aurelwc-auth'
+  }
+});
 let currentUser=null,currentProfile=null,selectedTeam=null;
 let obChannel=null,chatChannel=null,notifChannel=null,priceChartInstance=null;
 let allPrices={},allResolved={};window.allBids={};window.allAsks={};
@@ -527,19 +534,18 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   
   if(session?.user){
     currentUser=session.user;
-    try{
-      const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-      if(error)throw error;
-      currentProfile=data;
-      if(!currentProfile)showAuthScreen();
-      else if(currentProfile.status==='pending')showPendingScreen();
-      else startApp();
-    }catch(err){
-      console.error('Erreur profil:',err);
-      // Si lecture profil echoue, deconnecter et montrer login
-      await sb.auth.signOut();
-      showAuthScreen();
+    // Retry jusqu'a 3 fois si le profil ne charge pas
+    let currentProfile2=null;
+    for(let i=0;i<3;i++){
+      try{
+        const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+        if(data){currentProfile2=data;break;}
+      }catch(e){await new Promise(r=>setTimeout(r,500));}
     }
+    currentProfile=currentProfile2;
+    if(!currentProfile)showAuthScreen();
+    else if(currentProfile.status==='pending')showPendingScreen();
+    else startApp();
   }else{
     currentUser=null;currentProfile=null;showAuthScreen();
   }
