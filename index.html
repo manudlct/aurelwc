@@ -560,6 +560,21 @@ async function startApp(){
   document.getElementById('auth-screen').style.display='none';document.getElementById('pending-screen').style.display='none';document.getElementById('app').style.display='flex';
   const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
   currentProfile=data;updateTopbar();navigateTo('markets');subscribeNotifications();
+  // Rafraichir le token toutes les 10 minutes pour eviter la deconnexion
+  setInterval(async()=>{
+    try{
+      const{data:{session}}=await sb.auth.getSession();
+      if(!session){
+        // Session perdue - recharger la page proprement
+        window.location.reload();
+        return;
+      }
+      await sb.auth.refreshSession();
+      // Recharger le profil
+      const{data:p}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+      if(p){currentProfile=p;updateTopbar();}
+    }catch(e){console.log('Refresh session:',e);}
+  }, 10*60*1000);
 }
 function authTab(tab){
   document.getElementById('tab-login').classList.toggle('active',tab==='login');
@@ -861,9 +876,15 @@ async function renderPortfolio(){
   const el=document.getElementById('portfolio-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
   let bt,st,oo,prices;
   try{
+    // Verifier session avant requete
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session){window.location.reload();return;}
     const res=await Promise.all([sb.from('trades').select('*').eq('buyer_id',currentUser.id).eq('status','open'),sb.from('trades').select('*').eq('seller_id',currentUser.id).eq('status','open'),sb.from('orders').select('*').eq('user_id',currentUser.id).eq('status','open'),sb.from('market_prices').select('*')]);
     bt=res[0].data;st=res[1].data;oo=res[2].data;prices=res[3].data;
-  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Verifie ta connexion et reessaie.</div>';return;}
+  }catch(err){
+    el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement — <button class="btn btn-primary btn-sm" onclick="renderPortfolio()">Reessayer</button></div>';
+    return;
+  }
   const pm={};(prices||[]).forEach(p=>pm[p.team_id]=p);
   const trades=[...(bt||[]).map(t=>({...t,myRole:'buyer'})),...(st||[]).map(t=>({...t,myRole:'seller'}))];
   // Calculer PNL latent total
@@ -911,12 +932,17 @@ async function renderHistory(){
   const el=document.getElementById('history-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
   let allTrades,allProfiles;
   try{
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session){window.location.reload();return;}
     const res=await Promise.all([
       sb.from('trades').select('*').order('created_at',{ascending:false}).limit(500),
       sb.from('profiles').select('id,pseudo').eq('status','active')
     ]);
     allTrades=res[0].data;allProfiles=res[1].data;
-  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Reessaie.</div>';return;}
+  }catch(err){
+    el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement — <button class="btn btn-primary btn-sm" onclick="renderHistory()">Reessayer</button></div>';
+    return;
+  }
   // Netting personnel
   const myTrades=(allTrades||[]).filter(t=>t.buyer_id===currentUser.id||t.seller_id===currentUser.id);
   const netting={};
@@ -987,13 +1013,18 @@ async function renderLeaderboard(){
   const el=document.getElementById('leaderboard-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
   let profiles,allTrades,prices;
   try{
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session){window.location.reload();return;}
     const res=await Promise.all([
       sb.from('profiles').select('*').eq('status','active'),
       sb.from('trades').select('*').eq('status','open'),
       sb.from('market_prices').select('*')
     ]);
     profiles=res[0].data;allTrades=res[1].data;prices=res[2].data;
-  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Reessaie.</div>';return;}
+  }catch(err){
+    el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement — <button class="btn btn-primary btn-sm" onclick="renderLeaderboard()">Reessayer</button></div>';
+    return;
+  }
   const pm={};(prices||[]).forEach(p=>pm[p.team_id]=p);
   // Calcul PNL latent pour chaque joueur
   const pnlMap={};
