@@ -521,13 +521,28 @@ let allPrices={},allResolved={};window.allBids={};window.allAsks={};
 let searchQuery='',groupFilter='ALL';
 
 sb.auth.onAuthStateChange(async(event,session)=>{
+  // Reset bouton login dans tous les cas
+  const loginBtn=document.getElementById('btn-login');
+  if(loginBtn){loginBtn.textContent='Se connecter';loginBtn.disabled=false;}
+  
   if(session?.user){
     currentUser=session.user;
-    const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-    currentProfile=data;
-    if(!currentProfile||currentProfile.status==='pending')showPendingScreen();
-    else startApp();
-  }else{currentUser=null;currentProfile=null;showAuthScreen();}
+    try{
+      const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+      if(error)throw error;
+      currentProfile=data;
+      if(!currentProfile)showAuthScreen();
+      else if(currentProfile.status==='pending')showPendingScreen();
+      else startApp();
+    }catch(err){
+      console.error('Erreur profil:',err);
+      // Si lecture profil echoue, deconnecter et montrer login
+      await sb.auth.signOut();
+      showAuthScreen();
+    }
+  }else{
+    currentUser=null;currentProfile=null;showAuthScreen();
+  }
 });
 
 function showAuthScreen(){document.getElementById('auth-screen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('pending-screen').style.display='none';}
@@ -838,7 +853,11 @@ async function cancelOrder(orderId){
 }
 async function renderPortfolio(){
   const el=document.getElementById('portfolio-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
-  const[{data:bt},{data:st},{data:oo},{data:prices}]=await Promise.all([sb.from('trades').select('*').eq('buyer_id',currentUser.id).eq('status','open'),sb.from('trades').select('*').eq('seller_id',currentUser.id).eq('status','open'),sb.from('orders').select('*').eq('user_id',currentUser.id).eq('status','open'),sb.from('market_prices').select('*')]);
+  let bt,st,oo,prices;
+  try{
+    const res=await Promise.all([sb.from('trades').select('*').eq('buyer_id',currentUser.id).eq('status','open'),sb.from('trades').select('*').eq('seller_id',currentUser.id).eq('status','open'),sb.from('orders').select('*').eq('user_id',currentUser.id).eq('status','open'),sb.from('market_prices').select('*')]);
+    bt=res[0].data;st=res[1].data;oo=res[2].data;prices=res[3].data;
+  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Verifie ta connexion et reessaie.</div>';return;}
   const pm={};(prices||[]).forEach(p=>pm[p.team_id]=p);
   const trades=[...(bt||[]).map(t=>({...t,myRole:'buyer'})),...(st||[]).map(t=>({...t,myRole:'seller'}))];
   // Calculer PNL latent total
@@ -884,11 +903,14 @@ async function renderPortfolio(){
 let histFilter={team:'',user:'',status:''};
 async function renderHistory(){
   const el=document.getElementById('history-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
-  // Charger TOUS les trades de la plateforme (historique global)
-  const[{data:allTrades},{data:allProfiles}]=await Promise.all([
-    sb.from('trades').select('*').order('created_at',{ascending:false}).limit(500),
-    sb.from('profiles').select('id,pseudo').eq('status','active')
-  ]);
+  let allTrades,allProfiles;
+  try{
+    const res=await Promise.all([
+      sb.from('trades').select('*').order('created_at',{ascending:false}).limit(500),
+      sb.from('profiles').select('id,pseudo').eq('status','active')
+    ]);
+    allTrades=res[0].data;allProfiles=res[1].data;
+  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Reessaie.</div>';return;}
   // Netting personnel
   const myTrades=(allTrades||[]).filter(t=>t.buyer_id===currentUser.id||t.seller_id===currentUser.id);
   const netting={};
@@ -957,11 +979,15 @@ function applyHistFilter(){
 }
 async function renderLeaderboard(){
   const el=document.getElementById('leaderboard-content');el.innerHTML='<div style="color:var(--muted);padding:32px;text-align:center">Chargement...</div>';
-  const[{data:profiles},{data:allTrades},{data:prices}]=await Promise.all([
-    sb.from('profiles').select('*').eq('status','active'),
-    sb.from('trades').select('*').eq('status','open'),
-    sb.from('market_prices').select('*')
-  ]);
+  let profiles,allTrades,prices;
+  try{
+    const res=await Promise.all([
+      sb.from('profiles').select('*').eq('status','active'),
+      sb.from('trades').select('*').eq('status','open'),
+      sb.from('market_prices').select('*')
+    ]);
+    profiles=res[0].data;allTrades=res[1].data;prices=res[2].data;
+  }catch(err){el.innerHTML='<div style="color:var(--red);padding:32px;text-align:center">Erreur de chargement. Reessaie.</div>';return;}
   const pm={};(prices||[]).forEach(p=>pm[p.team_id]=p);
   // Calcul PNL latent pour chaque joueur
   const pnlMap={};
